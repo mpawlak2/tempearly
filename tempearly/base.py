@@ -90,7 +90,10 @@ class Token:
 		`self.key` key of the `context` dictionary.
 		"""
 		if len(self.key) == 0:
-			raise TemplateSyntaxError("Empty token variable at line ??")
+			raise TemplateSyntaxError("Line ??: empty token variable on line")
+
+		if not self.key.isidentifier():
+			raise TemplateSyntaxError(f"Line ??: incorrect variable name `{self.key}`")
 
 		return context[self.key]
 

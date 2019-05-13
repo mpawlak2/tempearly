@@ -40,13 +40,15 @@ def test_variables():
 
 def test_incorrect_tags():
 	"""Test that Template can handle an incorrect template strings."""
+	# (template string, context, part of an expected exception)
 	template_strings = [
-		("<div><<>></div>", {}), # Empty variable tag
-		("<div><<<VAR>></div>", {}), # Incorrect tag opening
+		("<div><<>></div>", {}, "Line 1"),
+		("<div><<<VAR>></div>", {}, "Line 1"),
 	]
 
 	for ts in template_strings:
 		template = Template.from_string(ts[0], context=ts[1])
 
-		with pytest.raises(TemplateSyntaxError):
+		with pytest.raises(TemplateSyntaxError) as e:
 			template.render()
+		assert ts[2] in str(e)
