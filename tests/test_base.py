@@ -42,20 +42,30 @@ def test_incorrect_tags():
 	"""Tests that a Template object can handle incorrect template strings."""
 	# (template string, context, part of an expected exception)
 	template_strings = [
-		("<div><<>></div>", {}, "Line 1"),
-		("<div><<</div>", {}, "Line 1"),
-		("<div>>></div>", {}, "Line 1"),
-		("<div><<<VAR>></div>", {}, "Line 1"),
+		("<div><<>></div>", {}),
+		("<div><<</div>", {}),
+		("<div>>></div>", {}),
+		("<div><<<VAR>></div>", {}),
 		("""<div>
-			<<<VAR>></div>""", {}, "Line 2"),
+			<<<VAR>></div>""", {}),
 		("""<div>
 
-			<<<VAR>></div>""", {}, "Line 3"),
+			<<<VAR>></div>""", {}),
 	]
 
-	for ts in template_strings:
+	exception_msgs = [
+		["Line 1"],
+		["Line 1"],
+		["Line 1"],
+		["Line 1"],
+		["Line 2"],
+		["Line 3"],
+	]
+
+	for i, ts in enumerate(template_strings):
 		template = Template.from_string(ts[0], context=ts[1])
 
 		with pytest.raises(TemplateSyntaxError) as e:
 			template.render()
-		assert ts[2] in str(e)
+		for m in exception_msgs[i]:
+			assert m in str(e)
