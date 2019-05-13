@@ -51,12 +51,15 @@ class Template():
 		line_no = 1
 
 		for token in tags_re.split(rendered):
+			prev_line_no = line_no
 			line_no += len(re.findall("\n", token))
 
 			if token.startswith(VARIABLE_TAG_START):
 				start_l = len(VARIABLE_TAG_START)
 				end_l = len(VARIABLE_TAG_END)
 				token = Token(token[start_l:-end_l].strip(), line_no=line_no)
+			elif VARIABLE_TAG_END in token and VARIABLE_TAG_START in token:
+				raise TemplateSyntaxError(f"Lines {prev_line_no} to {line_no}: new line after opening variable tag (variable tags must be defined in a single line)")
 			elif VARIABLE_TAG_START in token:
 				"""Variable opening tag found, but not parsed, may be opened and not closed variable tag."""
 				raise TemplateSyntaxError(f"Line {line_no}: not closed variable tag")

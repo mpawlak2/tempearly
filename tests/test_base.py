@@ -52,6 +52,13 @@ def test_incorrect_tags():
 		("""<div>
 
 			<<<VAR>></div>""", {}),
+		("""<div>
+
+			<<
+
+
+
+			<VAR>></div>""", {}),
 	]
 
 	exception_msgs = [
@@ -61,6 +68,7 @@ def test_incorrect_tags():
 		["Line 1"],
 		["Line 2"],
 		["Line 3"],
+		["Lines 1", "must", "single", "line"],
 	]
 
 	for i, ts in enumerate(template_strings):
@@ -69,4 +77,4 @@ def test_incorrect_tags():
 		with pytest.raises(TemplateSyntaxError) as e:
 			template.render()
 		for m in exception_msgs[i]:
-			assert m in str(e)
+			assert m in str(e), f"Testing index: {i}"
