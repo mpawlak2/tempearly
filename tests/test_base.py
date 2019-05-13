@@ -10,12 +10,12 @@ def test_no_tags():
 
 	The Template.render() method should return the same string as on the input.
 	"""
-	templates = [
+	template_strings = [
 		"simple template",
 		"<p>hello there</p>",
 		"<html><div></div></html>"
 	]
 
-	for t in templates:
-		t = Template.from_string(t)
-		assert t.render() == t
+	for ts in template_strings:
+		template = Template.from_string(ts)
+		assert template.render() == ts
