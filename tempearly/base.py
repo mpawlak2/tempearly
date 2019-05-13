@@ -7,6 +7,9 @@ TODO:
 
 
 class Template():
+	def __init__(self, template):
+		self.template = template
+
 	@classmethod
 	def from_string(cls, template):
 		return cls(template)
