@@ -37,13 +37,14 @@ class Template():
 		"""Render template string"""
 		tokens = []
 		rendered = self.template
+		line_no = 1
 
 		for token in tags_re.split(rendered):
 			if token.startswith(VARIABLE_TAG_START):
 				start_l = len(VARIABLE_TAG_START)
 				end_l = len(VARIABLE_TAG_END)
 
-				token = Token(token[start_l:-end_l])
+				token = Token(token[start_l:-end_l], line_no=1)
 			tokens.append(token)
 
 		print(tokens)
@@ -75,12 +76,15 @@ class Token:
 	to Token instance with VARIABLE type.
 	"""
 
-	def __init__(self, key):
+	def __init__(self, key, line_no):
 		"""Creates a new token
 
 		key is the name of the variable that the `Template.render()` method parsed from a template string
+
+		line_no is a number of a line at which token tags were discovered
 		"""
 		self.key = key
+		self.line_no = line_no
 
 	def render(self, context):
 		"""Use actual values from the Template's context to render a token.
@@ -90,10 +94,10 @@ class Token:
 		`self.key` key of the `context` dictionary.
 		"""
 		if len(self.key) == 0:
-			raise TemplateSyntaxError("Line ??: empty token variable on line")
+			raise TemplateSyntaxError(f"Line {self.line_no}: empty token variable on line")
 
 		if not self.key.isidentifier():
-			raise TemplateSyntaxError(f"Line ??: incorrect variable name `{self.key}`")
+			raise TemplateSyntaxError(f"Line {self.line_no}: incorrect variable name `{self.key}`")
 
 		return context[self.key]
 
