@@ -46,6 +46,9 @@ def test_incorrect_tags():
 		("<div><<<VAR>></div>", {}, "Line 1"),
 		("""<div>
 			<<<VAR>></div>""", {}, "Line 2"),
+		("""<div>
+
+			<<<VAR>></div>""", {}, "Line 2"),
 	]
 
 	for ts in template_strings:
