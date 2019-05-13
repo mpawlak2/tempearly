@@ -1,8 +1,9 @@
 """
 Test basic templating functionality.
 """
-
+import pytest
 from tempearly import Template
+from tempearly.exceptions import TemplateSyntaxError
 
 
 def test_no_tags():
@@ -29,9 +30,24 @@ def test_variables():
 	"""
 	template_strings = [
 		("*VAR*", {"VAR": 12,}, "12"),
-		("<div>*VAR*</div>", {"VAR": 1,}, "<div>1</div>")
+		("<div>*VAR*</div>", {"VAR": 1,}, "<div>1</div>"),
+		("<div>**VAR*</div>", {"VAR": 1,}, "<div>*1</div>"),
 	]
 
 	for ts in template_strings:
 		template = Template.from_string(ts[0], context=ts[1])
 		assert template.render() == ts[-1]
+
+
+def test_incorrect_tags():
+	"""Test that Template can handle an incorrect template strings."""
+	template_strings = [
+		("<div>**</div>", {}), # Empty variable tag
+		("<div>**VAR*</div>", {}), # Incorrect tag opening
+	]
+
+	for ts in template_strings:
+		template = Template.from_string(ts[0], context=ts[1])
+
+		with pytest.raises(TemplateSyntaxError):
+			template.render()

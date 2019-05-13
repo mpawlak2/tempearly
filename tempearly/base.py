@@ -39,6 +39,7 @@ class Template():
 				token = Token(token[start_l:-end_l])
 			tokens.append(token)
 
+		print(tokens)
 		return "".join([self.process_token(t) for t in tokens])
 
 	@classmethod
