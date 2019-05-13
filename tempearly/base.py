@@ -6,9 +6,11 @@ TODO:
 """
 import re
 
+from .exceptions import TemplateSyntaxError
 
-VARIABLE_TAG_START = "*"
-VARIABLE_TAG_END = "*"
+
+VARIABLE_TAG_START = "<<"
+VARIABLE_TAG_END = ">>"
 
 tags_re = re.compile(r"({}.*?{})".format(
 	re.escape(VARIABLE_TAG_START), re.escape(VARIABLE_TAG_END),
@@ -28,6 +30,9 @@ class Template():
 		detect which is it and process it accordingly.
 		"""
 		if isinstance(token, Token):
+			if len(token.key) == 0:
+				raise TemplateSyntaxError("Empty token variable at line ??")
+
 			return str(token.render(self.context))
 		return str(token)
 
@@ -65,13 +70,12 @@ class Template():
 class Token:
 	"""Represents inline token
 
-	After parsing the whole string, Template class will create tokens to
-	represent parts of the code that require additional processing.
+	After parsing a string, Template class will create tokens to
+	represent parts that require additional processing.
 
 	Types of tokens:
-	VARIABLE - represents a variable token, for example, *VAR* would translate
+	VARIABLE - represents a variable token, for example, <<VAR>> would translate
 	to Token instance with VARIABLE type.
-
 	"""
 
 	def __init__(self, key):
@@ -82,7 +86,7 @@ class Token:
 		self.key = key
 
 	def render(self, context):
-		"""Use actual values from Template's context to render the token.
+		"""Use actual values from the Template's context to render a token.
 
 		Every token represents a single variable from a template string. Hence it
 		is a relatively simple operation. All we have to do here is to return the value of 

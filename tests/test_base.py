@@ -29,9 +29,8 @@ def test_variables():
 	values.
 	"""
 	template_strings = [
-		("*VAR*", {"VAR": 12,}, "12"),
-		("<div>*VAR*</div>", {"VAR": 1,}, "<div>1</div>"),
-		("<div>**VAR*</div>", {"VAR": 1,}, "<div>*1</div>"),
+		("<<VAR>>", {"VAR": 12,}, "12"),
+		("<div><<VAR>></div>", {"VAR": 1,}, "<div>1</div>"),
 	]
 
 	for ts in template_strings:
@@ -42,8 +41,8 @@ def test_variables():
 def test_incorrect_tags():
 	"""Test that Template can handle an incorrect template strings."""
 	template_strings = [
-		("<div>**</div>", {}), # Empty variable tag
-		("<div>**VAR*</div>", {}), # Incorrect tag opening
+		("<div><<>></div>", {}), # Empty variable tag
+		("<div><<<VAR>></div>", {}), # Incorrect tag opening
 	]
 
 	for ts in template_strings:
