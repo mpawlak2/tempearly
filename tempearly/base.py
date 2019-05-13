@@ -20,6 +20,9 @@ class Template():
 		"""Represents template string."""
 		self.template = template
 
+	def process_token(self, token):
+		return str(token)
+
 	def render(self):
 		"""Render template string"""
 		tokens = []
@@ -33,7 +36,7 @@ class Template():
 				token = Token(token[start_l:-end_l])
 			tokens.append(token)
 
-		return "".join([str(e) for e in tokens])
+		return "".join([self.process_token(t) for t in tokens])
 
 	@classmethod
 	def from_string(cls, template, context=None):
