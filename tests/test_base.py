@@ -43,6 +43,7 @@ def test_incorrect_tags():
 	# (template string, context, part of an expected exception)
 	template_strings = [
 		("<div><<>></div>", {}, "Line 1"),
+		("<div><<</div>", {}, "Line 1"),
 		("<div><<<VAR>></div>", {}, "Line 1"),
 		("""<div>
 			<<<VAR>></div>""", {}, "Line 2"),

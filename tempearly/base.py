@@ -19,7 +19,7 @@ tags_re = re.compile(r"({}.*?{})".format(
 
 class Template():
 	def __init__(self, template, context):
-		"""Represents template string."""
+		"""Represents a template string."""
 		self.template = template
 		self.context = context
 
@@ -45,8 +45,10 @@ class Template():
 			if token.startswith(VARIABLE_TAG_START):
 				start_l = len(VARIABLE_TAG_START)
 				end_l = len(VARIABLE_TAG_END)
-
 				token = Token(token[start_l:-end_l], line_no=line_no)
+			elif VARIABLE_TAG_START in token:
+				"""Variable opening tag found, but not parsed, may be opened and not closed variable tag."""
+				raise TemplateSyntaxError(f"Line {line_no}: not closed variable tag")
 			tokens.append(token)
 
 		print(tokens)
