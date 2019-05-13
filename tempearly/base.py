@@ -19,8 +19,11 @@ class Template():
 	def __init__(self, template, context):
 		"""Represents template string."""
 		self.template = template
+		self.context = context
 
 	def process_token(self, token):
+		if isinstance(token, Token):
+			return str(token.render(self.context))
 		return str(token)
 
 	def render(self):
@@ -65,8 +68,21 @@ class Token:
 
 	"""
 
-	def __init__(self, content):
-		self.content = content
+	def __init__(self, key):
+		"""Creates a new token
+
+		key is the name of the variable that the `Template.render()` method parsed from a template string
+		"""
+		self.key = key
+
+	def render(self, context):
+		"""Use actual values from Template's context to render the token.
+
+		Every token represents a single variable from a template string. Hence it
+		is a relatively simple operation. All we have to do here is to return the value of 
+		`self.key` key of the `context` dictionary.
+		"""
+		return context[self.key]
 
 	def __str__(self):
-		return self.content
+		return self.key
