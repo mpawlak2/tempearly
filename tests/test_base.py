@@ -19,3 +19,19 @@ def test_no_tags():
 	for ts in template_strings:
 		template = Template.from_string(ts)
 		assert template.render() == ts
+
+
+def test_variables():
+	"""Test template strings with simple variables tokens
+
+	Template.render() method should replace these with appropriate
+	values.
+	"""
+	template_strings = [
+		("*VAR*", {"VAR": 12,}, "12"),
+		("<div>*VAR*</div>", {"VAR": 1,}, "<div>1</div>")
+	]
+
+	for ts in template_strings:
+		template = Template.from_string(ts[0], context=ts[1])
+		assert template.render() == ts[-1]
