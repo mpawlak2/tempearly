@@ -30,9 +30,6 @@ class Template():
 		detect which is it and process it accordingly.
 		"""
 		if isinstance(token, Token):
-			if len(token.key) == 0:
-				raise TemplateSyntaxError("Empty token variable at line ??")
-
 			return str(token.render(self.context))
 		return str(token)
 
@@ -92,6 +89,9 @@ class Token:
 		is a relatively simple operation. All we have to do here is to return the value of 
 		`self.key` key of the `context` dictionary.
 		"""
+		if len(self.key) == 0:
+			raise TemplateSyntaxError("Empty token variable at line ??")
+
 		return context[self.key]
 
 	def __str__(self):
