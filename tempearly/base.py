@@ -22,7 +22,7 @@ class Template():
 
 	def render(self):
 		"""Render template string"""
-		contents = []
+		tokens = []
 		rendered = self.template
 
 		for token in tags_re.split(rendered):
@@ -31,9 +31,9 @@ class Template():
 				end_l = len(VARIABLE_TAG_END)
 
 				token = Token(token[start_l:-end_l])
-			contents.append(token)
+			tokens.append(token)
 
-		return "".join([str(e) for e in contents])
+		return "".join([str(e) for e in tokens])
 
 	@classmethod
 	def from_string(cls, template, context=None):
