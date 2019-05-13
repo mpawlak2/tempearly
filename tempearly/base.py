@@ -18,7 +18,6 @@ tags_re = re.compile(r"({}.*?{})".format(
 
 
 class Template():
-	NEW_LINE_RE = re.compile(r"\n\s*$")
 	def __init__(self, template, context):
 		"""Represents template string."""
 		self.template = template
@@ -41,8 +40,7 @@ class Template():
 		line_no = 1
 
 		for token in tags_re.split(rendered):
-			if self.NEW_LINE_RE.search(token):
-				line_no += 1
+			line_no += len(re.findall("\n", token))
 
 			if token.startswith(VARIABLE_TAG_START):
 				start_l = len(VARIABLE_TAG_START)
