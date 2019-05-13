@@ -7,7 +7,8 @@ TODO:
 
 
 class Template():
-	def __init__(self, template):
+	def __init__(self, template, context):
+		"""Represents template string."""
 		self.template = template
 
 	def render(self):
@@ -15,5 +16,15 @@ class Template():
 		return self.template
 
 	@classmethod
-	def from_string(cls, template):
-		return cls(template)
+	def from_string(cls, template, context=None):
+		"""Initialize template from string
+
+		context is a dictionary containing your variables, by default
+		it is an empty dictionary
+
+		Sample:
+		>>> Template.from_string(template_string, context={'variable': 'value'})
+		"""
+		if not context:
+			context = {}
+		return cls(template, context)
