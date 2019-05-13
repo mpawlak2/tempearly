@@ -4,6 +4,15 @@ This module provides simple templating functionality.
 How it works:
 TODO:
 """
+import re
+
+
+VARIABLE_TAG_START = "*"
+VARIABLE_TAG_END = "*"
+
+tags_re = re.compile(r"{}.*?{}".format(
+	re.escape(VARIABLE_TAG_START), re.escape(VARIABLE_TAG_END),
+))
 
 
 class Template():
