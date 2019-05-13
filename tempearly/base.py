@@ -60,6 +60,8 @@ class Template():
 			elif VARIABLE_TAG_START in token:
 				"""Variable opening tag found, but not parsed, may be opened and not closed variable tag."""
 				raise TemplateSyntaxError(f"Line {line_no}: not closed variable tag")
+			elif VARIABLE_TAG_END in token:
+				raise TemplateSyntaxError(f"Line {line_no}: single closed variable tag (did you forget to open variable tag?)")
 			tokens.append(token)
 
 		print(tokens)
