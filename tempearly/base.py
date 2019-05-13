@@ -23,7 +23,7 @@ class Template():
 		it is an empty dictionary
 
 		Sample:
-		>>> Template.from_string(template_string, context={'variable': 'value'})
+		>>> Template.from_string(template_string, {'variable': 'value'})
 		"""
 		if not context:
 			context = {}
