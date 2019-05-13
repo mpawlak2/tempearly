@@ -55,8 +55,8 @@ def test_incorrect_tags():
 
 	exception_msgs = [
 		["Line 1"],
-		["Line 1"],
-		["Line 1"],
+		["Line 1", "not closed"],
+		["Line 1", "forget"],
 		["Line 1"],
 		["Line 2"],
 		["Line 3"],
