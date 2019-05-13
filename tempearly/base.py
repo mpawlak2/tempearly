@@ -22,6 +22,11 @@ class Template():
 		self.context = context
 
 	def process_token(self, token):
+		"""Process a token and return rendered value.
+
+		A token can be either string literal or Token instance,
+		detect which is it and process it accordingly.
+		"""
 		if isinstance(token, Token):
 			return str(token.render(self.context))
 		return str(token)
