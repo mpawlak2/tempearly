@@ -83,14 +83,15 @@ class Template():
 
 
 class Token:
-	"""Represents inline token
+	"""Represents an inline token.
 
-	After parsing a string, Template class will create tokens to
+	After parsing a template string, the Template class will create tokens to
 	represent parts that require additional processing.
 
 	Types of tokens:
-	VARIABLE - represents a variable token, for example, <<VAR>> would translate
-	to Token instance with VARIABLE type.
+	VARIABLE - represents a variable token, for example, `<<VAR>>` string would translate
+	into a Token instance with a VARIABLE type. Variable tags inside template strings must be defined in a
+	single line.
 	"""
 
 	def __init__(self, key, line_no):
