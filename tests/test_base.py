@@ -9,7 +9,7 @@ from tempearly.exceptions import TemplateSyntaxError
 def test_no_tags():
 	"""Test simple template strings without any tags.
 
-	The Template.render() method should return the same string as on the input.
+	The Template.render() method should return the same string it was initialize with.
 	"""
 	template_strings = [
 		"simple template",
@@ -23,10 +23,10 @@ def test_no_tags():
 
 
 def test_variables():
-	"""Test template strings with simple variables tokens
+	"""Test template strings with simple variable tokens
 
-	Template.render() method should replace these with appropriate
-	values.
+	The Template.render() method should replace these tokens with
+	appropriate values.
 	"""
 	template_strings = [
 		("<<VAR>>", {"VAR": 12,}, "12"),
@@ -39,11 +39,12 @@ def test_variables():
 
 
 def test_incorrect_tags():
-	"""Test that Template can handle an incorrect template strings."""
+	"""Tests that a Template object can handle incorrect template strings."""
 	# (template string, context, part of an expected exception)
 	template_strings = [
 		("<div><<>></div>", {}, "Line 1"),
 		("<div><<</div>", {}, "Line 1"),
+		("<div>>></div>", {}, "Line 1"),
 		("<div><<<VAR>></div>", {}, "Line 1"),
 		("""<div>
 			<<<VAR>></div>""", {}, "Line 2"),
