@@ -46,7 +46,7 @@ class Template():
 		return str(token)
 
 	def tokenize(self):
-		"""Generate token list from the input string.
+		"""Generate a token list from the input string.
 		
 		When finished, the `self.tokens` attribute will be populated.
 		"""
@@ -75,7 +75,7 @@ class Template():
 	def render(self):
 		"""Render a template string."""
 		self.tokens = self.tokenize()
-		
+
 		return "".join([self.process_token(t) for t in self.tokens])
 
 	@classmethod
