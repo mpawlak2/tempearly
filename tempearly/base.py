@@ -136,8 +136,12 @@ class Token:
 		"""
 		self.key = key
 		self.line_no = line_no
+
+		# The default attribute, for now, is the dictionary
+		# of callables that provide default values.
 		self.defaults = {
 			"date": datetime.date.today,
+			"datetime": datetime.datetime.today,
 		}
 
 	def render(self, context):

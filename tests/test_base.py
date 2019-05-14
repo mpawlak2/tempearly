@@ -112,7 +112,12 @@ def test_default_variables():
             "<<Ddate>>",
             {},
             f"{datetime.date.today()}",
-        ]
+        ],
+        [
+            "<<Ddatetime>>",
+            {},
+            f"{datetime.datetime.now()}",
+        ],
     ]
 
     for t in templates:
