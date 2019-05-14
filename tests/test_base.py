@@ -60,6 +60,11 @@ def test_incorrect_tags():
 
 
 			<VAR>></div>""", {}),
+		("""<div><<
+
+
+
+			<VAR>></div>""", {}),
 	]
 
 	exception_msgs = [
@@ -69,7 +74,8 @@ def test_incorrect_tags():
 		["Line 1"],
 		["Line 2"],
 		["Line 3"],
-		["Lines 1", "must", "single", "line"],
+		["Line 3", "must", "single", "line"],
+		["Line 1", "must", "single", "line"],
 	]
 
 	for i, ts in enumerate(template_strings):

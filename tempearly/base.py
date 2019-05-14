@@ -62,7 +62,15 @@ class Template():
 				start_l = len(VARIABLE_TAG_START)
 				end_l = len(VARIABLE_TAG_END)
 				token = Token(token[start_l:-end_l].strip(), line_no=line_no)
-			elif VARIABLE_TAG_END in token and VARIABLE_TAG_START in token:
+			elif VARIABLE_TAG_START in token and VARIABLE_TAG_END in token:
+				tiny_line_no = 0
+				# TODO: I might want to save that in a list for
+				# a later use. Or refactor `token` into the list
+				# type, and instead of .append use tokens + token syntax.
+				for i, tiny in enumerate(re.split(r"\n", token)):
+					if VARIABLE_TAG_START in tiny:
+						tiny_line_no = i
+						raise TemplateSyntaxError(f"Line {prev_line_no + tiny_line_no}: new line after the opening variable tag (variable tags must be defined in a single line)")
 				raise TemplateSyntaxError(f"Lines {prev_line_no} to {line_no}: new line after opening variable tag (variable tags must be defined in a single line)")
 			elif VARIABLE_TAG_START in token:
 				"""Variable opening tag found, but not parsed, may be opened and not closed variable tag."""
