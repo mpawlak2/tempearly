@@ -150,17 +150,20 @@ class Token:
 		if len(self.key) == 0:
 			raise create_exception(f"Line {self.line_no}: empty token variable on line")
 
+		if len(self.key) <= 2:
+			raise create_exception(f"Line {self.line_no}: the variable name is too short; variable names should be at leas 3 characters long")
+
 		if not self.key.isidentifier():
 			raise create_exception(f"Line {self.line_no}: incorrect variable name `{self.key}`")
 
-		if self.key.startswith("D"):
+		if self.key.startswith("D") and self.key[1:] in self.defaults:
 			"""Default variables start with the `D` prefix.
 			TODO: If there is a variable in the context dictionary under the `self.key` key then use that one.
 			"""
 			return self.defaults[self.key[1:]]()
 
 		if self.key not in context:
-			raise create_exception(f"Line {self.line_no}: the variable `{self.key}` is not defined in the context", token=self, exception_class=TemplateKeyError)
+			raise create_exception(f"Line {self.line_no}: the variable `{self.key}` is not defined in the context dictionary", token=self, exception_class=TemplateKeyError)
 
 		return context[self.key]
 

@@ -118,3 +118,17 @@ def test_default_variables():
     for t in templates:
         template = Template.from_string(t[0], t[1])
         assert template.render() == t[2]
+
+    # If the default variable does not exist
+    # the TemplateKeyError exception should be raised.
+    with pytest.raises(TemplateKeyError) as e:
+        template = Template.from_string("<<DtotallyDoesNotExists>>")
+        template.render()
+
+    # If you pass just the `D` character there should
+    # be an exception raised.
+    with pytest.raises(TemplateSyntaxError) as e:
+        template = Template.from_string("<<D>>")
+        template.render()
+    assert "characters" in str(e)
+    assert "Line 1" in str(e)
