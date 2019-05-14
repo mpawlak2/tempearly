@@ -41,6 +41,9 @@ class DefaultVariable(metaclass=DefaultVariableMeta):
     """When subclassing always remember to provide the `name` class attribute
     which must be a unique variable name (among default variables that are already defined).
 
+    All you have to do to use your variable is to subclass this class, and implement the `__call__` method
+    that will return the value that can be converted to string.
+
     Usage from a template string:
         From a template string you would use your variable by prefixing it with the
         `D` character, i.e., capital D.
