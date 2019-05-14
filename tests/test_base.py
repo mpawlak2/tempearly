@@ -53,6 +53,15 @@ def test_variables():
     t = Template.from_string("<<'' ''>>")
     with pytest.raises(TemplateSyntaxError) as e:
         t.render()
+    assert "incorrect" in str(e)
+    assert "string" in str(e)
+
+    # An incorrect string, three quotes.
+    t = Template.from_string("<< ''' >>")
+    with pytest.raises(TemplateSyntaxError) as e:
+        t.render()
+    assert "incorrect" in str(e)
+    assert "string" in str(e)
 
 
 def test_incorrect_tags():

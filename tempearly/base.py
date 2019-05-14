@@ -158,7 +158,7 @@ class Token:
             stripped = self.key[1:-1]
             if q in stripped:
                 """When the variable tag contains two strings, or an incorrect string."""
-                raise create_exception(f"Line {self.line_no}: incorrect string declaration, you can have only one string in the variable tag")
+                raise create_exception(f"Line {self.line_no}: incorrect string in the variable tag")
             return stripped
 
         if len(self.key) <= 2:
