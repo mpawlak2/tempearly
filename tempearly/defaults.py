@@ -1,6 +1,20 @@
 """
 This module provides default variables that can be used from
 a template string.
+
+Default variables consist of:
+(1) date
+    usage: <<Ddate>>
+    Returns today's date. By default will be cast to the string.
+
+(2) datetime
+    usage: <<Ddatetime>>
+    Returns the current time through the datetime.datetime object.
+
+(3)
+    lorem
+    usage: <<Dlorem>>
+    Returns lorem ipsum hard-coded text.
 """
 import datetime
 import os
