@@ -28,6 +28,19 @@ tags_re = re.compile(r"({}.*?{})".format(
 ))
 
 
+def create_exception(message, token=None, exception_class=TemplateSyntaxError):
+	"""Create an exception instance; a helper function.
+
+	Arguments:
+		token
+			is the Token object, representing the match in a template string. (None by default)
+
+		exception_class
+			is a type of the TemplateError exception class, e.g., create_exception or TemplateKeyError
+	"""
+	return exception_class(message, token=token)
+
+
 class Template():
 	def __init__(self, template, context):
 		"""Represents a template string."""
@@ -70,13 +83,13 @@ class Template():
 				for i, tiny in enumerate(re.split(r"\n", token)):
 					if VARIABLE_TAG_START in tiny:
 						tiny_line_no = i
-						raise TemplateSyntaxError(f"Line {prev_line_no + tiny_line_no}: new line after the opening variable tag (variable tags must be defined in a single line)")
-				raise TemplateSyntaxError(f"Lines {prev_line_no} to {line_no}: new line after opening variable tag (variable tags must be defined in a single line)")
+						raise create_exception(f"Line {prev_line_no + tiny_line_no}: new line after the opening variable tag (variable tags must be defined in a single line)")
+				raise create_exception(f"Lines {prev_line_no} to {line_no}: new line after opening variable tag (variable tags must be defined in a single line)")
 			elif VARIABLE_TAG_START in token:
 				"""Variable opening tag found, but not parsed, may be opened and not closed variable tag."""
-				raise TemplateSyntaxError(f"Line {line_no}: not closed variable tag")
+				raise create_exception(f"Line {line_no}: not closed variable tag")
 			elif VARIABLE_TAG_END in token:
-				raise TemplateSyntaxError(f"Line {line_no}: single closed variable tag (did you forget to open variable tag?)")
+				raise create_exception(f"Line {line_no}: single closed variable tag (did you forget to open variable tag?)")
 			tokens.append(token)
 		return tokens
 
@@ -131,13 +144,13 @@ class Token:
 		`self.key` key of the `context` dictionary.
 		"""
 		if len(self.key) == 0:
-			raise TemplateSyntaxError(f"Line {self.line_no}: empty token variable on line")
+			raise create_exception(f"Line {self.line_no}: empty token variable on line")
 
 		if not self.key.isidentifier():
-			raise TemplateSyntaxError(f"Line {self.line_no}: incorrect variable name `{self.key}`")
+			raise create_exception(f"Line {self.line_no}: incorrect variable name `{self.key}`")
 
 		if self.key not in context:
-			raise TemplateKeyError(f"Line {self.line_no}: the variable `{self.key}` is not defined in the context")
+			raise create_exception(f"Line {self.line_no}: the variable `{self.key}` is not defined in the context", token=self, exception_class=TemplateKeyError)
 
 		return context[self.key]
 

@@ -88,10 +88,14 @@ def test_incorrect_tags():
 
 
 def test_variable_does_not_exist():
-	"""Should complain when the variable name is not defined in the context."""
-	templates = ("<<div>>", {})
+	"""A variable name used in the variable tags must be defined in the context."""
+	templates = ("<<div>>", {}) # Notice there is no "div" key in the dictionary.
 	template = Template.from_string(templates[0], templates[1])
 	with pytest.raises(TemplateKeyError) as e:
 		template.render()
 	assert "context" in str(e)
 	assert "Line 1" in str(e)
+	try:
+		template.render()
+	except TemplateKeyError as e:
+		assert e.token
