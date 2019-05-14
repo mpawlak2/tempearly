@@ -155,6 +155,10 @@ class Token:
 		if len(self.key) <= 2:
 			raise create_exception(f"Line {self.line_no}: the variable name is too short; variable names should be at leas 3 characters long")
 
+		if self.is_string_statement():
+			q = self.key[0]
+			return self.key.lstrip(q).rstrip(q)
+
 		if not self.key.isidentifier():
 			raise create_exception(f"Line {self.line_no}: incorrect variable name `{self.key}`")
 
@@ -168,6 +172,14 @@ class Token:
 			raise create_exception(f"Line {self.line_no}: the variable `{self.key}` is not defined in the context dictionary", token=self, exception_class=TemplateKeyError)
 
 		return context[self.key]
+
+	def is_string_statement(self):
+		"""Checks if the `self.key` contained between quotes."""
+		if self.key.startswith("\"") and self.key.endswith("\""):
+			return True
+		elif self.key.startswith("'") and self.key.endswith("'"):
+			return True
+		return False
 
 	def __str__(self):
 		return self.key

@@ -31,12 +31,14 @@ def test_variables():
 	"""Test template strings with simple variable tokens
 
 	The Template.render() method should replace these tokens with
-	appropriate values.
+	appropriate values. If the contents within variable tag are put
+    between quotes, then that tag should evaluate to that string.
 	"""
 	template_strings = [
 		("<<VAR>>", {"VAR": 12,}, "12"),
 		("<div><<VAR>></div>", {"VAR": 1,}, "<div>1</div>"),
 		("""<div><< VAR >></div>""", {"VAR": 1,}, "<div>1</div>"),
+		("""<div><< "VAR" >></div>""", {"VAR": 1,}, "<div>VAR</div>"),
 	]
 
 	for ts in template_strings:
