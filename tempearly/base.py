@@ -45,9 +45,9 @@ class Template():
 			return str(token.render(self.context))
 		return str(token)
 
-	def render(self):
-		"""Render a template string.
-
+	def tokenize(self):
+		"""Generate token list from the input string.
+		
 		When finished, the `self.tokens` attribute will be populated.
 		"""
 		tokens = []
@@ -70,9 +70,13 @@ class Template():
 			elif VARIABLE_TAG_END in token:
 				raise TemplateSyntaxError(f"Line {line_no}: single closed variable tag (did you forget to open variable tag?)")
 			tokens.append(token)
-		self.tokens = tokens
+		return tokens
+
+	def render(self):
+		"""Render a template string."""
+		self.tokens = self.tokenize()
 		
-		return "".join([self.process_token(t) for t in tokens])
+		return "".join([self.process_token(t) for t in self.tokens])
 
 	@classmethod
 	def from_string(cls, template, context=None):
