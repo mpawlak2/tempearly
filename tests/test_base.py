@@ -1,6 +1,7 @@
 """
 Test basic templating functionality.
 """
+import datetime
 import pytest
 from tempearly import Template
 from tempearly.exceptions import TemplateSyntaxError, TemplateKeyError
@@ -99,3 +100,21 @@ def test_variable_does_not_exist():
 		template.render()
 	except TemplateKeyError as e:
 		assert e.token
+
+
+def test_default_variables():
+    """The Template should provide some variables by default.
+
+    Default variables are prefixed with the `D` character, e.g., Ddate.
+    """
+    templates = [
+        [
+            "<<Ddate>>",
+            {},
+            f"{datetime.date.today()}",
+        ]
+    ]
+
+    for t in templates:
+        template = Template.from_string(t[0], t[1])
+        assert template.render() == t[2]

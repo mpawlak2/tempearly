@@ -15,6 +15,7 @@ that can be of several types:
 (1) Variable token: this token is representing a custom tag with a variable name in it; when rendered
 will display the `context` dictionary value assigned to a key with the variable name.
 """
+import datetime
 import re
 
 from .exceptions import TemplateSyntaxError, TemplateKeyError
@@ -135,6 +136,9 @@ class Token:
 		"""
 		self.key = key
 		self.line_no = line_no
+		self.defaults = {
+			"date": datetime.date.today,
+		}
 
 	def render(self, context):
 		"""Use actual values from the Template's context to render a token.
@@ -148,6 +152,12 @@ class Token:
 
 		if not self.key.isidentifier():
 			raise create_exception(f"Line {self.line_no}: incorrect variable name `{self.key}`")
+
+		if self.key.startswith("D"):
+			"""Default variables start with the `D` prefix.
+			TODO: If there is a variable in the context dictionary under the `self.key` key then use that one.
+			"""
+			return self.defaults[self.key[1:]]()
 
 		if self.key not in context:
 			raise create_exception(f"Line {self.line_no}: the variable `{self.key}` is not defined in the context", token=self, exception_class=TemplateKeyError)
