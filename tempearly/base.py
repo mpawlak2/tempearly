@@ -17,7 +17,7 @@ will display the `context` dictionary value assigned to a key with the variable 
 """
 import re
 
-from .exceptions import TemplateSyntaxError
+from .exceptions import TemplateSyntaxError, TemplateKeyError
 
 
 VARIABLE_TAG_START = "<<"
@@ -135,6 +135,9 @@ class Token:
 
 		if not self.key.isidentifier():
 			raise TemplateSyntaxError(f"Line {self.line_no}: incorrect variable name `{self.key}`")
+
+		if self.key not in context:
+			raise TemplateKeyError(f"Line {self.line_no}: the variable `{self.key}` is not defined in the context")
 
 		return context[self.key]
 

@@ -1,2 +1,6 @@
 class TemplateSyntaxError(Exception):
-    pass
+	pass
+
+
+class TemplateKeyError(Exception):
+	pass
