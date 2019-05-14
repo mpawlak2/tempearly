@@ -33,6 +33,7 @@ class Template():
 		"""Represents a template string."""
 		self.template = template
 		self.context = context
+		self.tokens = []
 
 	def process_token(self, token):
 		"""Process a token and return rendered value.
@@ -45,7 +46,10 @@ class Template():
 		return str(token)
 
 	def render(self):
-		"""Render template string"""
+		"""Render a template string.
+
+		When finished, the `self.tokens` attribute will be populated.
+		"""
 		tokens = []
 		rendered = self.template
 		line_no = 1
@@ -66,8 +70,8 @@ class Template():
 			elif VARIABLE_TAG_END in token:
 				raise TemplateSyntaxError(f"Line {line_no}: single closed variable tag (did you forget to open variable tag?)")
 			tokens.append(token)
-
-		print(tokens)
+		self.tokens = tokens
+		
 		return "".join([self.process_token(t) for t in tokens])
 
 	@classmethod

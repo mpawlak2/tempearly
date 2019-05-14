@@ -20,6 +20,7 @@ def test_no_tags():
 	for ts in template_strings:
 		template = Template.from_string(ts)
 		assert template.render() == ts
+		assert len(template.tokens) > 0
 
 
 def test_variables():
