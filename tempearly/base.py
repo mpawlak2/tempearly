@@ -152,12 +152,13 @@ class Token:
 		if len(self.key) == 0:
 			raise create_exception(f"Line {self.line_no}: empty token variable on line")
 
-		if len(self.key) <= 2:
-			raise create_exception(f"Line {self.line_no}: the variable name is too short; variable names should be at leas 3 characters long")
-
 		if self.is_string_statement():
+			"""If the `self.key` is the string, i.e., template string for that fragment could look like: <<"STR">>."""
 			q = self.key[0]
 			return self.key.lstrip(q).rstrip(q)
+
+		if len(self.key) <= 2:
+			raise create_exception(f"Line {self.line_no}: the variable name is too short; variable names should be at leas 3 characters long")
 
 		if not self.key.isidentifier():
 			raise create_exception(f"Line {self.line_no}: incorrect variable name `{self.key}`")

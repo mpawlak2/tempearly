@@ -39,6 +39,9 @@ def test_variables():
 		("<div><<VAR>></div>", {"VAR": 1,}, "<div>1</div>"),
 		("""<div><< VAR >></div>""", {"VAR": 1,}, "<div>1</div>"),
 		("""<div><< "VAR" >></div>""", {"VAR": 1,}, "<div>VAR</div>"),
+		("""<div><< " VAR" >></div>""", {"VAR": 1,}, "<div> VAR</div>"),
+		("""<div><< " " >></div>""", {"VAR": 1,}, "<div> </div>"),
+		("""<div><< "" >></div>""", {"VAR": 1,}, "<div></div>"),
 	]
 
 	for ts in template_strings:
