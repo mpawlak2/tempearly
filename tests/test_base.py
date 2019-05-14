@@ -126,6 +126,11 @@ def test_default_variables():
             {},
             str(dict(os.environ)),
         ],
+        [
+            "<<Dlorem>>",
+            {},
+            True,
+        ],
     ]
 
     for t in templates:

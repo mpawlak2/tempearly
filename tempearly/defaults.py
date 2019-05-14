@@ -16,11 +16,18 @@ class DefaultVariableMeta(type):
     def __new__(meta, name, bases, class_dict):
         """There are some conditions:
 
-        (1) The class_dict must contain `name` key.
+        (1) The class_dict must contain `name` key
         (2) The `key` must be unique
+        (3) The class must define __call__ method
         """
         cls = type.__new__(meta, name, bases, class_dict)
         if len(bases) > 0:
+            if "__call__" not in class_dict:
+                raise AttributeError(
+                    "You must implement the `__call__` method in your"
+                    " custom default variable."
+                )
+
             if "name" not in class_dict:
                 raise AttributeError(
                     "You must provide the `name` attribute on your custom"
@@ -75,3 +82,16 @@ class DEnv(DefaultVariable):
 
     def __call__(self):
         return dict(os.environ)
+
+
+class DLorem(DefaultVariable):
+    """Default variable providing lorem ipsum text.
+
+    The hard-coded text is used as I do not want to use an external lib
+    or write one myself.
+    """
+    name = "lorem"
+
+    def __call__(self):
+        return """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis vehicula turpis. Vestibulum eu blandit libero. Praesent cursus felis imperdiet porta ornare. Quisque tincidunt lectus id egestas semper. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc cursus ante eros, id euismod libero congue nec. Vivamus hendrerit turpis vel hendrerit pulvinar. Curabitur eget urna sit amet erat euismod tincidunt ut sed velit. Praesent at odio odio.
+Praesent non varius dolor, et ullamcorper velit. Mauris a ipsum interdum nunc luctus pulvinar. Donec viverra ultricies nibh, ac dapibus elit. Nulla scelerisque lorem et libero molestie scelerisque. Suspendisse maximus tortor vitae efficitur consectetur. In ornare felis a neque gravida dictum. Quisque quis risus a enim pellentesque sollicitudin. Nunc eu lorem a augue tempor pellentesque. Mauris vestibulum commodo porta. Curabitur varius odio ac porttitor consequat."""
