@@ -19,6 +19,7 @@ import datetime
 import re
 
 from .exceptions import TemplateSyntaxError, TemplateKeyError
+from .defaults import DEFAULT_VARIABLE_REGISTRY
 
 
 VARIABLE_TAG_START = "<<"
@@ -139,10 +140,7 @@ class Token:
 
 		# The default attribute, for now, is the dictionary
 		# of callables that provide default values.
-		self.defaults = {
-			"date": datetime.date.today,
-			"datetime": datetime.datetime.today,
-		}
+		self.defaults = DEFAULT_VARIABLE_REGISTRY
 
 	def render(self, context):
 		"""Use actual values from the Template's context to render a token.
