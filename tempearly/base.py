@@ -155,7 +155,11 @@ class Token:
 		if self.is_string_statement():
 			"""If the `self.key` is the string, i.e., template string for that fragment could look like: <<"STR">>."""
 			q = self.key[0]
-			return self.key.lstrip(q).rstrip(q)
+			stripped = self.key.lstrip(q).rstrip(q)
+			if q in stripped:
+				"""This case is when the variable tag contains two strings, or an incorrect string."""
+				raise create_exception(f"Line {self.line_no}: incorrect string declaration, you can have only one string in the variable tag")
+			return stripped
 
 		if len(self.key) <= 2:
 			raise create_exception(f"Line {self.line_no}: the variable name is too short; variable names should be at leas 3 characters long")

@@ -48,6 +48,11 @@ def test_variables():
 		template = Template.from_string(ts[0], context=ts[1])
 		assert template.render() == ts[-1]
 
+	# A variable tag with two string declarations should raise an exception.
+	t = Template.from_string("<<'' ''>>")
+	with pytest.raises(TemplateSyntaxError) as e:
+		t.render()
+
 
 def test_incorrect_tags():
 	"""Tests that a Template object can handle incorrect template strings."""
