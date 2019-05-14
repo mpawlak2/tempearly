@@ -3,6 +3,8 @@ This module provides default variables that can be used from
 a template string.
 """
 import datetime
+import os
+
 
 DEFAULT_VARIABLE_REGISTRY = {}
 _KEYS = set()
@@ -64,3 +66,12 @@ class DDatetime(DefaultVariable):
 
     def __call__(self):
         return datetime.datetime.today()
+
+
+class DEnv(DefaultVariable):
+    """Default variable that returns a list of environmental variables in an operating system."""
+
+    name = "env"
+
+    def __call__(self):
+        return dict(os.environ)

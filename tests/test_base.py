@@ -2,9 +2,12 @@
 Test basic templating functionality.
 """
 import datetime
+import os
+
 import pytest
+
 from tempearly import Template
-from tempearly.exceptions import TemplateSyntaxError, TemplateKeyError
+from tempearly.exceptions import TemplateKeyError, TemplateSyntaxError
 
 
 def test_no_tags():
@@ -117,6 +120,11 @@ def test_default_variables():
             "<<Ddatetime>>",
             {},
             True, # We can get millisecond differences.
+        ],
+        [
+            "<<Denv>>",
+            {},
+            str(dict(os.environ)),
         ],
     ]
 
