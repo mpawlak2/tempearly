@@ -47,7 +47,7 @@ def test_set_template_dir():
     """The Template class should load files itself.
 
     """
-    template = Template.from_file("reddit.html")
+    template = Template.from_file(os.path.join(TEMPLATE_DIR, "reddit.html"))
     assert template.render()
 
 

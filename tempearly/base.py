@@ -126,13 +126,16 @@ class Template():
 
         Arguments:
 
-        `file_name` is the name of a file that you want to use for rendering, file paths
+        `file_name` is the absolute of a file that you want to use for rendering, TODO: file paths
         are relative to the template's root directory.
+
+        (TODO: for now there is no such thing as a template's root dir)
 
         `context` is a dictionary containing variables to use when rendering the template
         (by default it is an empty dictionary)
         """
-        pass
+        with open(file_name, encoding="utf") as fh:
+            return cls.from_string(fh.read(), context=context)
 
 
 class Token:
