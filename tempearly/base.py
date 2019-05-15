@@ -103,10 +103,12 @@ class Template():
 
     @classmethod
     def from_string(cls, template, context=None):
-        """Initialize template from string
+        """Instantiate the Template class from a string.
 
-        context is a dictionary containing your variables, by default
-        it is an empty dictionary
+        Arguments:
+
+        `context` is a dictionary containing variables to use when rendering the template
+        (by default it is an empty dictionary)
 
         Sample:
         >>> Template.from_string(template_string, {'variable': 'value'})
@@ -114,6 +116,20 @@ class Template():
         if not context:
             context = {}
         return cls(template, context)
+
+    @classmethod
+    def from_file(cls, file_name, context=None):
+        """Instantiate the Template class with a template string from the file.
+
+        Arguments:
+
+        `file_name` is the name of a file that you want to use for rendering, file paths
+        are relative to the template's root directory.
+
+        `context` is a dictionary containing variables to use when rendering the template
+        (by default it is an empty dictionary)
+        """
+        pass
 
 
 class Token:

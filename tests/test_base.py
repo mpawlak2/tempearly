@@ -43,6 +43,14 @@ def test_simple_html_file():
         assert t.render() == contents
 
 
+def test_set_template_dir():
+    """The Template class should load files itself.
+
+    """
+    template = Template.from_file("reddit.html")
+    assert template.render()
+
+
 def test_variables():
     """Test template strings with simple variable tokens
 
