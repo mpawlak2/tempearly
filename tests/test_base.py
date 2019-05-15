@@ -31,7 +31,12 @@ def test_no_tags():
 
 
 def test_simple_html_file():
-    """Render a simple html file."""
+    """Render a simple html file.
+
+    There are no variable tags in that HTML file. Just make sure that a real-world HTML template
+    would not cause any name clashes. I chose tags << and >> to indicate a variable context. Although
+    there is a lot of < and > in HTML, you wouldn't usually use double < (<<) or > (>>).
+    """
     with open(os.path.join(TEMPLATE_DIR, "reddit.html"), encoding="utf") as fh:
         contents = fh.read()
         t = Template.from_string(contents)
