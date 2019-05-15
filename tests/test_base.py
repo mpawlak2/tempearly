@@ -10,6 +10,9 @@ from tempearly import Template
 from tempearly.exceptions import TemplateKeyError, TemplateSyntaxError
 
 
+TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "templates")
+
+
 def test_no_tags():
     """Test simple template strings without any tags.
 
@@ -25,6 +28,14 @@ def test_no_tags():
         template = Template.from_string(ts)
         assert template.render() == ts
         assert len(template.tokens) > 0
+
+
+def test_simple_html_file():
+    """Render a simple html file."""
+    with open(os.path.join(TEMPLATE_DIR, "reddit.html"), encoding="utf") as fh:
+        contents = fh.read()
+        t = Template.from_string(contents)
+        assert t.render() == contents
 
 
 def test_variables():
