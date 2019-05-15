@@ -121,6 +121,9 @@ class Template():
     def from_file(cls, file_name, context=None):
         """Instantiate the Template class with a template string from the file.
 
+        Please be conscious that this method will load the entire file into the computer memory.
+        You might want to use TODO: when dealing with bigger files.
+
         Arguments:
 
         `file_name` is the name of a file that you want to use for rendering, file paths
