@@ -230,6 +230,10 @@ def test_variable_funcs():
 
     # SU - string upper
     # Convert string to the upper case.
-    message = "test test test"
-    template = Template.from_string(f"<<SU '{message}'>>")
-    assert template.render() == message.upper()
+    messages = [
+        "test test test",
+        "",
+    ]
+    for m in messages:
+        template = Template.from_string(f"<<SU '{m}'>>")
+        assert template.render() == (m.upper() if m else "")
