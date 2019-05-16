@@ -158,7 +158,15 @@ class Token:
         line_no is a number of a line at which token tags were discovered
         """
         self.key = key
+        self.func = None
         self.line_no = line_no
+
+        # Check if this is a two part expression in a format: XY variable/string
+        # (1) It would have to start with one to two letter symbol followed by at least one space
+        expression_match = re.match(r"(\w\w?)\s*[\w\W]", self.key)
+        if expression_match:
+            self.func = expression_match[1]
+            self.key = self.key[len(self.func):].strip()
 
         # The default attribute, for now, is the dictionary
         # of callables that provide default values.

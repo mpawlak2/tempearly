@@ -199,3 +199,12 @@ def test_default_variables():
         template.render()
     assert "characters" in str(e)
     assert "Line 1" in str(e)
+
+
+def test_variable_funcs():
+    """By using one to two letter symbol before the variable name or a string,
+    template engine should apply functions.
+    """
+    # DY function would get year from the date
+    template = Template.from_string("<<DY Ddate>>")
+    assert template.render() == datetime.date.today().year
