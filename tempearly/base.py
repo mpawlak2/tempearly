@@ -214,7 +214,10 @@ class Token:
     def compute(self, variable):
         """Compute with the use of a function if specified."""
         if self.func:
-            return self.funcs[self.func](variable)
+            try:
+                return self.funcs[self.func](variable)
+            except Exception as e:
+                raise type(e)(f"Line {self.line_no}: (function error, correct attribute type?) {e}")
         return variable
 
     def is_string_statement(self):

@@ -208,3 +208,10 @@ def test_variable_funcs():
     # DY function would get year from the date
     template = Template.from_string("<<DY Ddate>>")
     assert template.render() == str(datetime.date.today().year)
+
+    # Should raise when wrong type, e.g., passing string.
+    template = Template.from_string("<<DY 'test'>>")
+    with pytest.raises(AttributeError) as e:
+        template.render()
+    # And should add line number to the error message.
+    assert "Line 1" in str(e)
