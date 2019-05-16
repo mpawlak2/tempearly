@@ -204,6 +204,8 @@ def test_default_variables():
 def test_variable_funcs():
     """By using one to two letter symbol before the variable name or a string,
     template engine should apply functions.
+
+    All the functions should be one to two letter words.
     """
     # DY function would get year from the date
     template = Template.from_string("<<DY Ddate>>")
@@ -215,3 +217,19 @@ def test_variable_funcs():
         template.render()
     # And should add line number to the error message.
     assert "Line 1" in str(e)
+
+    # Should raise when the function does not exist
+    template = Template.from_string("<<XX 'test'>>")
+    with pytest.raises(TemplateSyntaxError):
+        template.render()
+
+    # Should raise when the function has more than 2 letters.
+    template = Template.from_string("<<XXC 'test'>>")
+    with pytest.raises(TemplateSyntaxError):
+        template.render()
+
+    # SU - string upper
+    # Convert string to the upper case.
+    message = "test test test"
+    template = Template.from_string(f"<<SU '{message}'>>")
+    assert template.render() == message.upper()

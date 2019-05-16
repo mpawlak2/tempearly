@@ -157,6 +157,12 @@ class Token:
 
         line_no is a number of a line at which token tags were discovered
         """
+        # The default attribute, for now, is the dictionary
+        # of callables that provide default values.
+        self.defaults = DEFAULT_VARIABLE_REGISTRY
+        # Default functions.
+        self.funcs = DEFAULT_FUNCTION_REGISTRY
+
         self.key = key
         self.func = None
         self.line_no = line_no
@@ -168,12 +174,8 @@ class Token:
             self.func = expression_match[1]
             self.key = self.key[len(self.func):].strip()
 
-        # The default attribute, for now, is the dictionary
-        # of callables that provide default values.
-        self.defaults = DEFAULT_VARIABLE_REGISTRY
-
-        # Default functions.
-        self.funcs = DEFAULT_FUNCTION_REGISTRY
+            if self.func not in self.funcs:
+                raise create_exception(f"Line {self.line_no}: the function `{self.func}` does not exist")
 
     def render(self, context):
         """Use actual values from the Template's context to render a token.

@@ -39,6 +39,11 @@ def get_date_year(date):
     return date.year
 
 
+@register_func("SU")
+def string_upper(value):
+    return value.upper()
+
+
 class DefaultVariableMeta(type):
     """Metaclass that will register default fields."""
 
