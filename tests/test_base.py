@@ -48,6 +48,10 @@ def test_html_file():
     template = Template.from_file(os.path.join(TEMPLATE_DIR, "reddit.html"))
     assert template.render()
 
+    # Html file with a variable tag.
+    template = Template.from_file(os.path.join(TEMPLATE_DIR, "variable_date.html"))
+    assert str(datetime.date.today()) in template.render()
+
 
 def test_variables():
     """Test template strings with simple variable tokens
