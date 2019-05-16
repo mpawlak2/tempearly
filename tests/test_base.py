@@ -43,10 +43,8 @@ def test_simple_html_file():
         assert t.render() == contents
 
 
-def test_set_template_dir():
-    """The Template class should load files itself.
-
-    """
+def test_html_file():
+    """The Template class should load files itself."""
     template = Template.from_file(os.path.join(TEMPLATE_DIR, "reddit.html"))
     assert template.render()
 
