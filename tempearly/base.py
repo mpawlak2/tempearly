@@ -19,7 +19,7 @@ import datetime
 import re
 
 from .exceptions import TemplateSyntaxError, TemplateKeyError
-from .defaults import DEFAULT_VARIABLE_REGISTRY
+from .defaults import DEFAULT_VARIABLE_REGISTRY, DEFAULT_FUNCTION_REGISTRY
 
 
 VARIABLE_TAG_START = "<<"
@@ -163,7 +163,7 @@ class Token:
 
         # Check if this is a two part expression in a format: XY variable/string
         # (1) It would have to start with one to two letter symbol followed by at least one space
-        expression_match = re.match(r"(\w\w?)\s*[\w\W]", self.key)
+        expression_match = re.match(r"(\w\w?)\s+[\w\W]", self.key)
         if expression_match:
             self.func = expression_match[1]
             self.key = self.key[len(self.func):].strip()
@@ -171,6 +171,9 @@ class Token:
         # The default attribute, for now, is the dictionary
         # of callables that provide default values.
         self.defaults = DEFAULT_VARIABLE_REGISTRY
+
+        # Default functions.
+        self.funcs = DEFAULT_FUNCTION_REGISTRY
 
     def render(self, context):
         """Use actual values from the Template's context to render a token.
@@ -189,7 +192,7 @@ class Token:
             if q in stripped:
                 """When the variable tag contains two strings, or an incorrect string."""
                 raise create_exception(f"Line {self.line_no}: incorrect string in the variable tag")
-            return stripped
+            return self.compute(stripped)
 
         if len(self.key) <= 2:
             raise create_exception(f"Line {self.line_no}: the variable name is too short; variable names should be at leas 3 characters long")
@@ -201,12 +204,18 @@ class Token:
             """Default variables start with the `D` prefix.
             TODO: If there is a variable in the context dictionary under the `self.key` key then use that one.
             """
-            return self.defaults[self.key[1:]]()
+            return self.compute(self.defaults[self.key[1:]]())
 
         if self.key not in context:
             raise create_exception(f"Line {self.line_no}: the variable `{self.key}` is not defined in the context dictionary", token=self, exception_class=TemplateKeyError)
 
-        return context[self.key]
+        return self.compute(context[self.key])
+
+    def compute(self, variable):
+        """Compute with the use of a function if specified."""
+        if self.func:
+            return self.funcs[self.func](variable)
+        return variable
 
     def is_string_statement(self):
         """Checks if the `self.key` contained between quotes."""

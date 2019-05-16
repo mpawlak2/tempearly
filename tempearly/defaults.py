@@ -21,7 +21,22 @@ import os
 
 
 DEFAULT_VARIABLE_REGISTRY = {}
+DEFAULT_FUNCTION_REGISTRY = {}
 _KEYS = set()
+
+
+def register_func(name):
+    """Register a function to use it from a template string under the `name` name."""
+    def decorator(func):
+        DEFAULT_FUNCTION_REGISTRY[name] = func
+        return func
+    return decorator
+
+
+@register_func("DY")
+def get_date_year(date):
+    """Get the year part from the date."""
+    return date.year
 
 
 class DefaultVariableMeta(type):

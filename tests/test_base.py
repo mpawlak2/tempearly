@@ -207,4 +207,4 @@ def test_variable_funcs():
     """
     # DY function would get year from the date
     template = Template.from_string("<<DY Ddate>>")
-    assert template.render() == datetime.date.today().year
+    assert template.render() == str(datetime.date.today().year)
