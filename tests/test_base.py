@@ -237,3 +237,9 @@ def test_variable_funcs():
     for m in messages:
         template = Template.from_string(f"<<SU '{m}'>>")
         assert template.render() == (m.upper() if m else "")
+
+
+def test_simple_expressions():
+    """Test that the Template.render() can parse <% content %> blocks."""
+    template = Template.from_string("<% if 1 == 1 %><% endif %>")
+    assert template.render() == ""

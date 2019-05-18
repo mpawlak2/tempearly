@@ -32,9 +32,12 @@ from .defaults import DEFAULT_VARIABLE_REGISTRY, DEFAULT_FUNCTION_REGISTRY
 
 VARIABLE_TAG_START = "<<"
 VARIABLE_TAG_END = ">>"
+BLOCK_TAG_START = "<%"
+BLOCK_TAG_END = "%>"
 
-tags_re = re.compile(r"({}.*?{})".format(
+tags_re = re.compile(r"({}.*?{}|{}.*?{})".format(
     re.escape(VARIABLE_TAG_START), re.escape(VARIABLE_TAG_END),
+    re.escape(BLOCK_TAG_START), re.escape(BLOCK_TAG_END),
 ))
 
 
@@ -64,7 +67,7 @@ class Template():
         A token can be either string literal or Token instance,
         detect which is it and process it accordingly.
         """
-        if isinstance(token, Token):
+        if isinstance(token, Token) or isinstance(token, Block):
             return str(token.render(self.context))
         return str(token)
 
@@ -74,6 +77,9 @@ class Template():
         When finished, the `self.tokens` attribute will be populated.
         """
         tokens = []
+        blocks = []
+        block = None
+
         rendered = self.template
         line_no = 1
 
@@ -100,7 +106,22 @@ class Template():
                 raise create_exception(f"Line {line_no}: not closed variable tag")
             elif VARIABLE_TAG_END in token:
                 raise create_exception(f"Line {line_no}: single closed variable tag (did you forget to open variable tag?)")
-            tokens.append(token)
+            elif token.startswith(BLOCK_TAG_START):
+                if "endif" not in token and "endfor" not in token:
+                    block = Block(token)
+                    blocks.append(block)
+                else:
+                    # token is equal to something like that <% endif %> or <% endfor %>
+                    block = blocks.pop()
+                    if len(blocks) == 0:
+                        tokens.append(block)
+                        block = None
+                        continue
+
+            if block:
+                block.append_token(token)
+            else:
+                tokens.append(token)
         return tokens
 
     def render(self):
@@ -240,3 +261,23 @@ class Token:
 
     def __str__(self):
         return self.key
+
+
+class Block:
+    """The Block class represents the template block expression, it may be an 'if' statement
+    or a loop. Each block can contain Token objects and other Block objects.
+
+    A self.tokens attribute stores strings, Token objects, and Block objects.
+    """
+
+    def __init__(self, token):
+        self.operand = token
+        self.tokens = []
+
+    def append_token(self, token):
+        """`token` is a string, Token or Block object."""
+        self.tokens.append(token)
+
+    def render(self, context):
+        """Similar to the Token.render() method."""
+        return ""
