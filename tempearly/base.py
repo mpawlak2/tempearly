@@ -109,7 +109,7 @@ class Template():
                 raise create_exception(f"Line {line_no}: single closed variable tag (did you forget to open variable tag?)")
             elif token.startswith(BLOCK_TAG_START):
                 if "endif" not in token and "endfor" not in token:
-                    block = Block(token[len(BLOCK_TAG_START): -len(BLOCK_TAG_END)])
+                    block = Block(token[len(BLOCK_TAG_START): -len(BLOCK_TAG_END)].strip())
                     blocks.append(block)
                     continue
                 else:
