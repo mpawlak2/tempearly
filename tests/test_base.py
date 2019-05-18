@@ -247,3 +247,6 @@ def test_simple_expressions():
     # execute expression properly
     template = Template.from_string("<% if 1 == 1 %>1<% endif %>")
     assert template.render() == "1"
+
+    template = Template.from_string("<% if 1 == 1 %>11<% endif %>")
+    assert template.render() == "11"
