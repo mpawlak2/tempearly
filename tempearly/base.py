@@ -110,6 +110,7 @@ class Template():
                 if "endif" not in token and "endfor" not in token:
                     block = Block(token)
                     blocks.append(block)
+                    continue
                 else:
                     # token is equal to something like that <% endif %> or <% endfor %>
                     block = blocks.pop()
@@ -280,4 +281,7 @@ class Block:
 
     def render(self, context):
         """Similar to the Token.render() method."""
-        return ""
+        resp = ""
+        for t in self.tokens:
+            resp = resp + t
+        return resp
