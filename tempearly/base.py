@@ -28,6 +28,7 @@ import re
 
 from .exceptions import TemplateSyntaxError, TemplateKeyError
 from .defaults import DEFAULT_VARIABLE_REGISTRY, DEFAULT_FUNCTION_REGISTRY
+from .conditions import Condition
 
 
 VARIABLE_TAG_START = "<<"
@@ -108,7 +109,7 @@ class Template():
                 raise create_exception(f"Line {line_no}: single closed variable tag (did you forget to open variable tag?)")
             elif token.startswith(BLOCK_TAG_START):
                 if "endif" not in token and "endfor" not in token:
-                    block = Block(token)
+                    block = Block(token[len(BLOCK_TAG_START): -len(BLOCK_TAG_END)])
                     blocks.append(block)
                     continue
                 else:
@@ -272,8 +273,26 @@ class Block:
     """
 
     def __init__(self, token):
+        """The expression (token argument) is some kind of comparison expression that
+        contains Token objects.
+        """
+        self.condition = False
+        self.conditions = []
+        self.loop = False
+
+        if "if" in token:
+            self.condition = True
+        elif "for" in token:
+            self.loop = True
+
         self.operand = token
         self.tokens = []
+
+        # Prepare 'if' expression.
+        if self.condition:
+            self.operand = self.operand.replace("if", "", 1)
+            self.conditions.append(Condition(self.operand))
+
 
     def append_token(self, token):
         """`token` is a string, Token or Block object."""
@@ -281,6 +300,9 @@ class Block:
 
     def render(self, context):
         """Similar to the Token.render() method."""
+        if not self.conditions[0].check():
+            return ""
+
         resp = ""
         for t in self.tokens:
             resp = resp + t

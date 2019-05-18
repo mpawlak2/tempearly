@@ -250,3 +250,7 @@ def test_simple_expressions():
 
     template = Template.from_string("<% if 1 == 1 %>11<% endif %>")
     assert template.render() == "11"
+
+    # Test that false 'if' blocks are not executed.
+    template = Template.from_string("<% if 1 == 2 %>11<% endif %>")
+    assert template.render() == ""
