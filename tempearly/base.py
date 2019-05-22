@@ -12,7 +12,7 @@ It's features and API:
     The Template.from_file() method works just like the method from_string() with the exception that the source 
     template string is read from the file on the disk.
 
-    The Template.render() method renders the provided template string with the use of the context dictionary.
+    The Template.render() method renders a provided template string with the use of the context dictionary.
 
 The Token class:
 The Token class represents template tokens that can be of several types:
@@ -66,7 +66,7 @@ class Template():
         """Process a token and return rendered value.
 
         A token can be either string literal or Token instance,
-        detect which is it and process it accordingly.
+        detect which one and process it accordingly.
         """
         if isinstance(token, Token) or isinstance(token, Block):
             return str(token.render(self.context))
@@ -157,7 +157,7 @@ class Template():
 
         Arguments:
 
-        `file_name` is the absolute of a file that you want to use for rendering, TODO: file paths
+        `file_name` is the absolute path of a file that you want to use for rendering, TODO: file paths
         are relative to the template's root directory.
 
         (TODO: for now there is no such thing as a template's root dir)
