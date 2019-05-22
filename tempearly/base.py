@@ -1,24 +1,24 @@
 """
 This module provides a simple templating functionality.
 
-Exposes one class, `Template` which creates and renders template strings.
+Presents one class, `Template`, which creates and renders template strings.
 
 It's features and API:
 
     The Template.from_string() class method constructs a Template object from a template 
-    string (i.e., a string containing custom tags). You may also want to pass a dictionary containing
-    your key-value mappings as the `context` argument.
+    string (i.e., a string containing custom tags). You may also want to provide a context dictionary containing
+    your key-value mappings.
 
-    The Template.from_file() method works just like the from_string() with the exception that the source 
+    The Template.from_file() method works just like the method from_string() with the exception that the source 
     template string is read from the file on the disk.
 
-    The Template.render() method renders provided template string with use of the context dictionary.
+    The Template.render() method renders the provided template string with the use of the context dictionary.
 
 The Token class:
 The Token class represents template tokens that can be of several types:
     (1) Variable token: this token is representing a custom tag with a variable name in it; when rendered
     will display the `context` dictionary value assigned to a key with the variable name.
-    (2) Block token - token that is represented in a template string by <% ... %> tags, avaliable expressions
+    (2) Block token - token that is represented in a template string by <% ... %> tags, available expressions
     inside tags:
         - if expression
         - for loop
