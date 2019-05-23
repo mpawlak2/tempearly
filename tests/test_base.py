@@ -268,3 +268,14 @@ def test_simple_expressions():
     11
     <% endif %>""")
     assert template.render() == ""
+
+    # Should read a variable.
+    template = Template.from_string("""<% if  VAR  ==    2  %>
+    11
+    <% endif %>""", {"VAR": 1})
+    assert template.render() == ""
+
+    template = Template.from_string("""<% if VAR == 2 %>
+    11
+    <% endif %>""", {"VAR": 2})
+    assert "11" in template.render()

@@ -109,7 +109,7 @@ class Template():
                 raise create_exception(f"Line {line_no}: single closed variable tag (did you forget to open variable tag?)")
             elif token.startswith(BLOCK_TAG_START):
                 if "endif" not in token and "endfor" not in token:
-                    block = Block(token[len(BLOCK_TAG_START): -len(BLOCK_TAG_END)].strip())
+                    block = Block(token[len(BLOCK_TAG_START): -len(BLOCK_TAG_END)].strip(), line_no)
                     blocks.append(block)
                     continue
                 else:
@@ -181,6 +181,12 @@ class Token:
     single line.
     """
 
+    # The default attribute, for now, is the dictionary
+    # of callables that provide default values.
+    defaults = DEFAULT_VARIABLE_REGISTRY
+    # Default functions.
+    funcs = DEFAULT_FUNCTION_REGISTRY
+
     def __init__(self, key, line_no):
         """Creates a new token.  
 
@@ -188,12 +194,6 @@ class Token:
 
         line_no is a number of a line at which token tags were discovered
         """
-        # The default attribute, for now, is the dictionary
-        # of callables that provide default values.
-        self.defaults = DEFAULT_VARIABLE_REGISTRY
-        # Default functions.
-        self.funcs = DEFAULT_FUNCTION_REGISTRY
-
         self.key = key
         self.func = None
         self.line_no = line_no
@@ -217,6 +217,9 @@ class Token:
         """
         if len(self.key) == 0:
             raise create_exception(f"Line {self.line_no}: empty token variable on line")
+
+        if self.key.isdigit():
+            return int(self.key)
 
         if self.is_string_statement():
             """If the `self.key` is the string, i.e., template string for that fragment could look like: <<"STR">>."""
@@ -272,7 +275,7 @@ class Block:
     A self.tokens attribute stores strings, Token objects, and Block objects.
     """
 
-    def __init__(self, token):
+    def __init__(self, token, line_no):
         """The expression (token argument) is some kind of comparison expression that
         contains Token objects.
         """
@@ -291,7 +294,7 @@ class Block:
         # Prepare 'if' expression.
         if self.condition:
             self.operand = self.operand.replace("if", "", 1)
-            self.conditions.append(Condition(self.operand))
+            self.conditions.append(Condition(self.operand, line_no))
 
 
     def append_token(self, token):
@@ -300,7 +303,7 @@ class Block:
 
     def render(self, context):
         """Similar to the Token.render() method."""
-        if not self.conditions[0].check():
+        if not self.conditions[0].check(context):
             return ""
 
         resp = ""

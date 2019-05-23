@@ -10,6 +10,7 @@
         - endif statement at the end
 """
 import re
+import tempearly.base
 
 
 OPERATORS = {}
@@ -21,16 +22,23 @@ operators_re = re.compile(r"({}|{}|{}|{})".format(
 class Condition:
     """Simples unit of logic in template. Used with 'if' Block objects."""
 
-    def __init__(self, condition):
+    def __init__(self, condition, line_no):
         """The condition argument is a simple three part expression, something operator something."""
         s = operators_re.split(condition)
-        self.a = s[0].strip()
-        self.b = s[2].strip()
-        self.op = s[1].strip()
+        a, self.op, b = [i.strip() for i in s]
+        self.a_tok = tempearly.base.Token(a, line_no)
+        self.b_tok = tempearly.base.Token(b, line_no)
 
-    def check(self):
-        """Evaluate the conditional logic."""
-        return OPERATORS[self.op](self.a, self.b)
+    def check(self, context):
+        """Evaluate the conditional logic.
+
+        Arguments:
+
+        `context` is a context dictionary used to render the whole template.
+        """
+        a_ren = self.a_tok.render(context)
+        b_ren = self.b_tok.render(context)
+        return OPERATORS[self.op](a_ren, b_ren)
 
 
 def register_operator(name):
