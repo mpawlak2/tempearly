@@ -284,3 +284,8 @@ def test_simple_expressions():
     <<VAR>>
     <% endif %>""", {"VAR": 2})
     assert "2" in template.render()
+
+    template = Template.from_string("""<% if  VAR  == 2 %>
+    <<VAR>>
+    <% endif %>""", {"VAR": 2})
+    assert "2" in template.render()
