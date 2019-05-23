@@ -23,6 +23,7 @@ The Token class represents template tokens that can be of several types:
         - if expression
         - for loop
 """
+from collections import deque
 import datetime
 import re
 
@@ -78,7 +79,7 @@ class Template():
         When finished, the `self.tokens` attribute will be populated.
         """
         tokens = []
-        blocks = []
+        blocks = deque()
         block = None
 
         rendered = self.template
@@ -291,14 +292,14 @@ class Block:
         self.operand = token
         self.tokens = []
 
-        # Prepare 'if' expression.
+        # Prepare an 'if' expression.
         if self.condition:
             self.operand = self.operand.replace("if", "", 1)
             self.conditions.append(Condition(self.operand, line_no))
 
 
     def append_token(self, token):
-        """`token` is a string, Token or Block object."""
+        """`token` is a string, Token or a Block object."""
         self.tokens.append(token)
 
     def render(self, context):
