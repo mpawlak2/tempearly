@@ -309,5 +309,8 @@ class Block:
 
         resp = ""
         for t in self.tokens:
-            resp = resp + t
+            if isinstance(t, Token):
+                resp = resp + str(t.render(context))
+            else:
+                resp = resp + t
         return resp
