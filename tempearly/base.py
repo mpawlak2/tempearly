@@ -3,7 +3,7 @@ This module provides a simple templating functionality.
 
 Presents one class, `Template`, which creates and renders template strings.
 
-It's features and API:
+Its features and API:
 
     The Template.from_string() class method constructs a Template object from a template 
     string (i.e., a string containing custom tags). You may also want to provide a context dictionary containing
